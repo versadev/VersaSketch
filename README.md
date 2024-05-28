@@ -1,4 +1,4 @@
-# VersaSketch
+# VersaSketch (beta)
 ## Overview
 VersaSketch is an HTML Canvas based multi-layer sketch tool.
 
