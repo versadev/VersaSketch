@@ -644,7 +644,7 @@
                 // Return hex colour as RGB
                 // Ref: https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 
-                // Define object to reurn rgb values
+                // Define object to return rgb values
                 let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
                 return result ? {
                     r: parseInt(result[1], 16),
@@ -717,7 +717,7 @@
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Track active drawing area control
+                // Track active drawing area control.
                 // The drawing area control will always be the main canvas.
                 // However, we may output to a different canvas depending on the tool selected.
                 // For example, the drawing events for the highlighter are based on the mouse / touch events
@@ -760,9 +760,7 @@
                 if (activeTool == 1) {
 
                     // Pen tool
-
                     document.getElementById("drawArea1").style.cursor = "default"; // show default cursor
-
                     ctx[drawAreaNum].globalCompositeOperation = 'source-over'; // Important - Default - draw on canvas 
                     
                     // Create shadow colour based on pen colour
@@ -799,7 +797,6 @@
                 if (activeTool == 2) {
 
                     // Highlight tool
-
                     document.getElementById("drawArea1").style.cursor = "default"; // show default cursor
 
                     let highlighterEraser = false;
