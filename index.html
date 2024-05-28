@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas VersaSketch</title>
+    <title>VersaSketch - Canvas Sketch Tool</title>
 
     <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
 
@@ -15,7 +15,7 @@
             
             /* Styles defined by theme */
             --display-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";            
-            --systemBorderRadius: 4px; /* defines the radius applied to borders and controls */
+            --systemBorderRadius: 8px; /* defines the radius applied to borders and controls */
                 
             --scrollbar-color: #dddddd; /* set colour of custom scrollbar */
                 
@@ -144,9 +144,12 @@
 
         body {
             box-sizing: border-box;
+            font-family: var(--display-font);
+            margin: 0px;
+            padding: 20px;
         }
 
-        #coords {
+        #canvasInfo {
             touch-action: none; /* this is very important for touch to work */
             position: absolute;
             display: block;
@@ -172,8 +175,7 @@
             margin: 0px;
             padding: 10px;
             border: 2px solid #dddddd;
-            border-radius: 5px;
-            
+            border-radius: 5px;            
         }
 
         .drawingContainer {
@@ -343,7 +345,6 @@
             z-index: 15; /* must be less than the canvas we are erasing so as not to conflict with cursor */
         }
 
-
         /* VersaDev icon tool buttons start */
         .btn-icon-tool {
             display: inline-block;
@@ -377,7 +378,6 @@
             color: var(--icon-button-hover-text-colour);
             background-color: var(--icon-button-hover-background-colour);
         }
-
         /* VersaDev icon tool buttons end */
 
         /* VersaDev: Debug window start */
@@ -420,6 +420,21 @@
             border-radius: var(--systemBorderRadius);
             opacity: 0.7;
         }      
+        /* Buttons (arrows pointing upwards and downwards) */
+        ::-webkit-scrollbar-button {
+        }
+
+        /* Track (progress bar - NOT covered by the handle) */
+        ::-webkit-scrollbar-track-piece {
+        }
+
+        /*  Corner (corner of the scrollbar, where both horizontal and vertical scrollbars meet) */
+        ::-webkit-scrollbar-corner {
+        }
+
+        /* Resizer (draggable resizing handle that appears at the bottom corner of some elements) */
+        ::-webkit-resizer {
+        }          
         /* VersaDev: Custom scrollbar end */
 
         /* VersaDev: Custom colour input start */
@@ -440,7 +455,6 @@
             border: none;
         }
         /* VersaDev: Custom colour input end */
-
 
     </style>
 
@@ -752,10 +766,11 @@
                 xy.y = y; // Update any changes due to scale
 
                 // Display x and y position of the pointer within the element
-                target.x.innerHTML = x;
-                target.y.innerHTML = y;
-                target.mode.innerHTML = mode;
-                target.drawAreaNum.innerHTML = drawAreaNum;
+                target.x.innerHTML = x.toString();
+                target.y.innerHTML = y.toString();
+                target.mode.innerHTML = mode.toString();
+                target.drawAreaNum.innerHTML = drawAreaNum.toString();
+                target.toolNum.innerHTML = activeTool.toString();
 
                 if (activeTool == 1) {
 
@@ -880,10 +895,11 @@
                 xy.y = y; // Update any changes due to scale
 
                 // Display x and y position of the pointer within the element
-                target.x.innerHTML = x;
-                target.y.innerHTML = y;
-                target.mode.innerHTML = mode;
-                target.drawAreaNum.innerHTML = drawAreaNum;
+                target.x.innerHTML = x.toString();
+                target.y.innerHTML = y.toString();
+                target.mode.innerHTML = mode.toString();
+                target.drawAreaNum.innerHTML = drawAreaNum.toString();
+                target.toolNum.innerHTML = activeTool.toString();
 
                 if (activeTool == 1) {
 
@@ -1297,7 +1313,6 @@
                         break;
                 }
 
-
             }
 
             let setColourPalette = function () {
@@ -1414,10 +1429,10 @@
                     // Check for Debug mode
                     if (isDebug == true) {
                         $('#debugWindow').css('display', 'block');
-                        $('#coords').css('display', 'block');
+                        $('#canvasInfo').css('display', 'block');
                     } else {
                         $('#debugWindow').css('display', 'none');
-                        $('#coords').css('display', 'none');
+                        $('#canvasInfo').css('display', 'none');
                     }
 
                     // Define width and height of drawing area
@@ -1516,13 +1531,14 @@
                     ctx[2].lineCap = "round";
                     ctx[2].fillRect(0, 0, drawArea1.width, drawArea1.height); // Set to same dimensions as drawing canvas                    
                    
-                    // Define object to target display of x and y pointer position
+                    // Define object to target display of x and y pointer position and additional debug information
                     target = {
                         x: document.getElementById('x'),
                         y: document.getElementById('y'),
                         mode: document.getElementById('mode'),
                         drawAreaNum: document.getElementById('drawAreaNum'),
-                        pointerData: document.getElementById('pointerData')
+                        pointerData: document.getElementById('pointerData'),
+                        toolNum: document.getElementById('toolNum')
                     };
 
                     // Setup events
@@ -1540,7 +1556,6 @@
                     this.changeHighlighterSize(null, 5);                    
                     this.changeEraserSize(null, 3);
                     this.changeEraserShape(null, 0);
-
 
                     this.debugWindow('Running');
 
@@ -1857,11 +1872,7 @@
                         // Clear, draw highlight, clear then load. Original will now be displayed (lines + highlight).
                         
                     }
-                   
-                    //let newImage = new Image();
-                    //newImage.src = jsonSketch;                    
-                    //newImage.onload = () => { ctxSource.drawImage(newImage, 0, 0, drawingWidth, drawingHeight); };
-                    
+                                       
                 },
 
                 // Tools and Utilities
@@ -1927,25 +1938,16 @@
 
     <div class="container body-content">
 
-        <h2>Canvas VersaSketch</h2>
+        <h2>VersaSketch - Canvas Sketch Tool</h2>
         <p>
             Developed by: VersaDev Pty Ltd - Warren Bullock<br />
             Date Created: 08/03/2024<br />
-            Last Updated: 12/03/2024<br />
+            Last Updated: 28/05/2024<br />
             <br />
             <b>Libraries</b><br />
             Bootstrap 5.3.3 - latest as of 06/03/2024<br />
             jQuery 3.7.1 - latest as of 16/03/2024<br />
         </p>
-
-        <div id="coords">
-            Canvas Drawing<br />
-            X: <span id="x"></span>
-            Y: <span id="y"></span><br />
-            Mode: <span id="mode"></span><br />
-            DrawAreaNum: <span id="drawAreaNum"></span><br />
-            Pointer Data: <span id="pointerData"></span>
-        </div>
 
         <div class="drawingModule">
             <div class="drawingContainer">
@@ -2071,6 +2073,16 @@
 
         <div id="debugWindow">
             Debug Window
+        </div>
+
+        <div id="canvasInfo">
+            [Canvas Information]<br />
+            X: <span id="x"></span>
+            Y: <span id="y"></span><br />
+            Mode: <span id="mode"></span><br />
+            DrawAreaNum: <span id="drawAreaNum"></span><br />
+            Tool: <span id="toolNum"></span><br />
+            Pointer Data: <span id="pointerData"></span>
         </div>
 
         <hr />
