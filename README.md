@@ -2,6 +2,8 @@
 ## Overview
 VersaSketch is an HTML Canvas based multi-layer sketch tool.
 
+![VersaSketch Screenshot](doc\screenshots\screenshot1.png "VersaSketch")
+
 ## Features
 - HTML / CSS / JavaScript based
 - Multi layer, background, highlight and drawing layers
