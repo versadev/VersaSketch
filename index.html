@@ -1877,17 +1877,6 @@
                         let newImage = new Image();
                         newImage.src = sketch.layers[i].data;
                         newImage.onload = () => { ctxSource.drawImage(newImage, 0, 0, drawingWidth, drawingHeight); };
-
-
-                        // Issue To Address
-
-                        // Create an image with highlight as well
-                        // Save, then clear.
-                        // Reload, add new lines and highlights.
-                        // Erase some lines and erase some highlight. <= This is the part the causes the problem
-                        // Select Load to reload the original. It will not display.
-                        // Draw a line, then clear, load will display lines not highlight.
-                        // Clear, draw highlight, clear then load. Original will now be displayed (lines + highlight).
                         
                     }
                                        
