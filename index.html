@@ -671,19 +671,18 @@
             let captureEvents = function () {
 
                 // Setup        
-                isDrawStart[1] = false;
-
-                isDrawing[1] = false;
+                isDrawStart[2] = false;
+                isDrawing[2] = false;
 
                 // Setup capture events
                 drawArea1.addEventListener("mousedown", function () {            
-                    isDrawing[1] = true;
-                    on_mousedown(event, 1);
+                    isDrawing[2] = true;
+                    on_mousedown(event, 2);
                 }, false);
 
                 drawArea1.addEventListener("touchstart", function () {                
-                    isDrawing[1] = true;
-                    on_mousedown(event, 1);
+                    isDrawing[2] = true;
+                    on_mousedown(event, 2);
                 }, false);
 
             };
@@ -736,7 +735,7 @@
                 // However, we may output to a different canvas depending on the tool selected.
                 // For example, the drawing events for the highlighter are based on the mouse / touch events
                 // on the main canvas but the output of the tool is sent to the highlighter canvas.
-                // Consequently, drawAreaNum will always be set to 1.
+                // Consequently, drawAreaNum will always be set to 2.
                 drawAreaNum = drawingAreaSelected;
                 //console.log(drawAreaNum);
 
@@ -822,15 +821,15 @@
 
                     // Output to the highlighter canvas
                     if (highlighterEraser == true) {
-                        ctx[2].globalCompositeOperation = 'destination-out' // Important - Preserve the underlying grid. The source is painted transparent allowing the grid to show through.
+                        ctx[1].globalCompositeOperation = 'destination-out' // Important - Preserve the underlying grid. The source is painted transparent allowing the grid to show through.
                     } else {
-                        ctx[2].globalCompositeOperation = 'source-over'; // Important - Default - draw on canvas 
+                        ctx[1].globalCompositeOperation = 'source-over'; // Important - Default - draw on canvas 
                     }
                     
                     let highlighterShadowColour = null;
                     if (highlighterEraser == false) {
                         // Create shadow colour based on highlighter colour
-                        //ctx[2].shadowColor = "rgba(0,0,0,.5)";
+                        //ctx[1].shadowColor = "rgba(0,0,0,.5)";
                         let rgb = null;                        
                         rgb = hexToRGB(highlighterColour);
                         highlighterShadowColour = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + '0.1' + ')';                         
@@ -838,22 +837,22 @@
                         highlighterShadowColour = '#ff0000'; // The colour (but NOT transparent) does not actually matter when globalCompositeOperation = 'destination-out'
                     }
 
-                    ctx[2].shadowColor = highlighterShadowColour;
-                    ctx[2].shadowBlur = 0; //highlighterSize * 2;
-                    ctx[2].lineCap = 'round';
-                    ctx[2].lineJoin = 'round';
-                    ctx[2].lineWidth = highlighterSize;
-                    ctx[2].strokeStyle = highlighterShadowColour; // Use shadow colour for highlighter (creates a water colour, thick marker effect)
+                    ctx[1].shadowColor = highlighterShadowColour;
+                    ctx[1].shadowBlur = 0; //highlighterSize * 2;
+                    ctx[1].lineCap = 'round';
+                    ctx[1].lineJoin = 'round';
+                    ctx[1].lineWidth = highlighterSize;
+                    ctx[1].strokeStyle = highlighterShadowColour; // Use shadow colour for highlighter (creates a water colour, thick marker effect)
 
                     // Begin drawing
                     isDrawStart[drawAreaNum] = true;
 
-                    ctx[2].beginPath();
+                    ctx[1].beginPath();
 
                     // Clear pointer data
                     pointerXYData.length = 0;
                     pointerXYData.push('drawStart');
-                    ctx[2].moveTo(x, y);
+                    ctx[1].moveTo(x, y);
                     pointerXYData.push(x, y);
                     pointerXYLast = xy;
 
@@ -951,7 +950,7 @@
                     let highlighterShadowColour = null;
                     if (highlighterEraser == false) {
                         // Create shadow colour based on highlighter colour
-                        //ctx[2].shadowColor = "rgba(0,0,0,.5)";
+                        //ctx[1].shadowColor = "rgba(0,0,0,.5)";
                         let rgb = null;                        
                         rgb = hexToRGB(highlighterColour);
                         highlighterShadowColour = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + '0.1' + ')';                         
@@ -959,22 +958,22 @@
                         highlighterShadowColour = '#ff0000'; // The colour (but NOT transparent) does not actually matter when globalCompositeOperation = 'destination-out'
                     }
 
-                    ctx[2].shadowColor = highlighterShadowColour;                    
-                    ctx[2].shadowBlur = 0; //highlighterSize * 2;
-                    ctx[2].lineCap = 'round';
-                    ctx[2].lineJoin = 'round';
-                    ctx[2].lineWidth = highlighterSize;
-                    ctx[2].strokeStyle = highlighterShadowColour; // Use shadow colour for highlighter (creates a water colour, thick marker effect)
+                    ctx[1].shadowColor = highlighterShadowColour;                    
+                    ctx[1].shadowBlur = 0; //highlighterSize * 2;
+                    ctx[1].lineCap = 'round';
+                    ctx[1].lineJoin = 'round';
+                    ctx[1].lineWidth = highlighterSize;
+                    ctx[1].strokeStyle = highlighterShadowColour; // Use shadow colour for highlighter (creates a water colour, thick marker effect)
 
                     if (isDrawing[drawAreaNum] == true) {
 
                         // Continue drawing
-                        ctx[2].quadraticCurveTo(pointerXYLast.x, pointerXYLast.y, x, y);
+                        ctx[1].quadraticCurveTo(pointerXYLast.x, pointerXYLast.y, x, y);
 
                         pointerXYData.push(x, y);
-                        ctx[2].stroke();
-                        ctx[2].beginPath();
-                        ctx[2].moveTo(x, y);
+                        ctx[1].stroke();
+                        ctx[1].beginPath();
+                        ctx[1].moveTo(x, y);
                         pointerXYLast = xy;
                         
                     }
@@ -1064,15 +1063,15 @@
 
                         // Apply the eraser                        
                         let eraserColour = '#ff0000'; // This colour is irrelevant as the source is painted transparent (globalCompositeOperation = 'destination-out')
-                        ctx[1].shadowColor = eraserColour;
-                        ctx[1].shadowBlur = 0;    
+                        ctx[2].shadowColor = eraserColour;
+                        ctx[2].shadowBlur = 0;    
 
                         if (eraserShape == 0) {
                             // Circle
-                            drawCircle(ctx[1], x + eraserSize, y + eraserSize, eraserSize, eraserColour, true);
+                            drawCircle(ctx[2], x + eraserSize, y + eraserSize, eraserSize, eraserColour, true);
                         } else {
                             // Square
-                            drawBox(ctx[1], x, y, eraserSize * 2, eraserSize * 2, eraserColour, 1, true);
+                            drawBox(ctx[2], x, y, eraserSize * 2, eraserSize * 2, eraserColour, 1, true);
                         }                
                         
                     }
@@ -1119,7 +1118,7 @@
                     isDrawing[drawAreaNum] = false;
                     isDrawStart[drawAreaNum] = false;
                     pointerXYData.push('drawEnd');
-                    ctx[2].stroke();
+                    ctx[1].stroke();
 
                     // Display pointer data
                     let pointerText = '';
@@ -1168,10 +1167,10 @@
 
                 //console.log(translatePos);
 
-                //ctx[1].save();
-                //ctx[1].translate(translatePos.x, translatePos.y);
-                //ctx[1].scale(scale, scale);
-                //ctx[1].restore();       
+                //ctx[2].save();
+                //ctx[2].translate(translatePos.x, translatePos.y);
+                //ctx[2].scale(scale, scale);
+                //ctx[2].restore();       
 
                 let canvasLayers = [{name: "Background", id: "drawBackground"},
                 {name: "Highlighter", id: "highlightArea"},
@@ -1192,16 +1191,8 @@
 
                 // Clear the appropriate canvas
                 switch (drawAreaNum) {
-                    case 1:
-                        // Clear the drawing area
-                        //ctx[1].fillStyle = "#000000";    
-                        ctx[1].fillRect(0, 0, drawArea1.width, drawArea1.height);
-                        ctx[1].clearRect(0, 0, drawArea1.width, drawArea1.height);
-
-                        // Clear the highlighter area
-                        ctx[2].fillRect(0, 0, drawArea1.width, drawArea1.height);
-                        ctx[2].clearRect(0, 0, drawArea1.width, drawArea1.height);
-
+                    case 2:
+                        reset();
                         break;
                 }
 
@@ -1209,8 +1200,26 @@
 
             let reset = function () {
 
-                // Clear the canvas drawing area                
-                ctx[0].fillRect(0, 0, drawArea1.width, drawArea1.height);
+                // Clear the highlighter area
+                ctx[1].fillRect(0, 0, drawingWidth, drawingHeight);
+                ctx[1].clearRect(0, 0, drawingWidth, drawingHeight);
+
+                // Clear the drawing area    
+                //ctx[2].fillStyle = "#000000";             
+                ctx[2].fillRect(0, 0, drawingWidth, drawingHeight);
+                ctx[2].clearRect(0, 0, drawingWidth, drawingHeight);
+
+                // Reset tools to their initial settings
+                initialiseTools();
+
+                // The next lines are important.
+                // If a user has been working on an image and the last thing they did was either use the eraser
+                // or the highlight eraser, each layer will load but will not be displayed. You can simulate this by
+                // following loading, selecting a pen tool and draw and then select load again to correctly display the image.
+                // Setting the globalCompositeOperation = 'source-over' on the highlight and drawing layer ensures the image
+                // loads correctly.
+                ctx[1].globalCompositeOperation = 'source-over'; // Important - Default - draw (highlight) on canvas 
+                ctx[2].globalCompositeOperation = 'source-over'; // Important - Default - draw on canvas 
 
                 // Clear pointer data
                 pointerXYData = [];
@@ -1223,6 +1232,18 @@
                 target.drawAreaNum.innerHTML = '';
                 target.pointerData.innerHTML = '';
 
+            };
+
+            let initialiseTools = function () {
+
+                // Initialise the tools to their default settings
+                VersaSketch.changeTool(null, 1);
+                VersaSketch.changePenColour(0);
+                VersaSketch.changePenSize(null, 2);
+                VersaSketch.changeHighlighterColour(4);
+                VersaSketch.changeHighlighterSize(null, 5);                    
+                VersaSketch.changeEraserSize(null, 3);
+                VersaSketch.changeEraserShape(null, 0);
             };
 
             let setTool = function (tooltype) {
@@ -1502,35 +1523,35 @@
                         //ctx[0].drawImage(backgroundImage,0,0, 200,200); 
                     }
 
-                    // Setup drawing canvas
-                    drawArea1 = document.getElementById('drawArea1');
-                    drawArea1.width = drawingWidth.toString();
-                    drawArea1.height = drawingHeight.toString();
-                    drawArea1.style.width = drawingWidth.toString() + 'px';
-                    drawArea1.style.height = drawingHeight.toString() + 'px';
-                    ctx[1] = drawArea1.getContext('2d');
-                    ctx[1].fillStyle = "transparent";
-                    ctx[1].strokeStyle = "#444";
-                    ctx[1].lineWidth = 1.5;
-                    ctx[1].lineCap = "round";
-                    ctx[1].fillRect(0, 0, drawArea1.width, drawArea1.height);
-
-                    // Store a copy of an empty drawing area. This can be used to check if a drawing area has been used (is dirty).
-                    emptyDrawingArea = drawArea1.toDataURL();
-
                     // Setup highlight canvas
                     highlightArea = document.getElementById('highlightArea');
                     highlightArea.width = drawingWidth.toString(); // Set to same dimensions as drawing canvas
                     highlightArea.height = drawingHeight.toString(); // Set to same dimensions as drawing canvas
                     highlightArea.style.width = drawingWidth.toString() + 'px'; // Set to same dimensions as drawing canvas
                     highlightArea.style.height = drawingHeight.toString() + 'px'; // Set to same dimensions as drawing canvas
-                    ctx[2] = highlightArea.getContext('2d');
+                    ctx[1] = highlightArea.getContext('2d');
+                    ctx[1].fillStyle = "transparent";
+                    ctx[1].strokeStyle = "#444";
+                    ctx[1].lineWidth = 1.5;
+                    ctx[1].lineCap = "round";
+                    ctx[1].fillRect(0, 0, drawingWidth, drawingHeight);  
+
+                    // Setup drawing canvas
+                    drawArea1 = document.getElementById('drawArea1');
+                    drawArea1.width = drawingWidth.toString();
+                    drawArea1.height = drawingHeight.toString();
+                    drawArea1.style.width = drawingWidth.toString() + 'px';
+                    drawArea1.style.height = drawingHeight.toString() + 'px';
+                    ctx[2] = drawArea1.getContext('2d');
                     ctx[2].fillStyle = "transparent";
                     ctx[2].strokeStyle = "#444";
                     ctx[2].lineWidth = 1.5;
                     ctx[2].lineCap = "round";
-                    ctx[2].fillRect(0, 0, drawArea1.width, drawArea1.height); // Set to same dimensions as drawing canvas                    
-                   
+                    ctx[2].fillRect(0, 0, drawingWidth, drawingHeight);
+
+                    // Store a copy of an empty drawing area. This can be used to check if a drawing area has been used (is dirty).
+                    emptyDrawingArea = drawArea1.toDataURL();
+                                     
                     // Define object to target display of x and y pointer position and additional debug information
                     target = {
                         x: document.getElementById('x'),
@@ -1548,14 +1569,8 @@
                     setColourPalette();
                     setColourPaletteHighlighter();
                     
-                    // Set default tools
-                    this.changeTool(null, 1);
-                    this.changePenColour(0);
-                    this.changePenSize(null, 2);
-                    this.changeHighlighterColour(4);
-                    this.changeHighlighterSize(null, 5);                    
-                    this.changeEraserSize(null, 3);
-                    this.changeEraserShape(null, 0);
+                    // Initialise tools
+                    initialiseTools();
 
                     this.debugWindow('Running');
 
@@ -1576,7 +1591,7 @@
                 },
 
                 clearDrawing: function () {
-                    clearDrawingArea(1);
+                    clearDrawingArea(2);
                 },
 
                 changeTool: function (el, tooltype) {
@@ -1803,6 +1818,9 @@
                     let drawingLayerNum = 0; 
                     let i = 0;
 
+                    // Reset the canvas and initialise tools
+                    reset();
+                    
                     // Load sketch (JSON string) from text area
                     let jsonSketch = document.getElementById('versaSketchData').value;
                     //console.log(jsonSketch);
@@ -1942,7 +1960,7 @@
         <p>
             Developed by: VersaDev Pty Ltd - Warren Bullock<br />
             Date Created: 08/03/2024<br />
-            Last Updated: 28/05/2024<br />
+            Last Updated: 29/05/2024<br />
             <br />
             <b>Libraries</b><br />
             Bootstrap 5.3.3 - latest as of 06/03/2024<br />
@@ -1953,8 +1971,8 @@
             <div class="drawingContainer">
                 <div id="canvasContainer" class="canvasArea">
                     <canvas id="drawBackground" class="backgroundCanvas"></canvas>
-                    <canvas id="drawArea1" class="drawingCanvas"></canvas>
                     <canvas id="highlightArea" class="highlightCanvas"></canvas>
+                    <canvas id="drawArea1" class="drawingCanvas"></canvas>                    
                 </div>            
                 <div class="drawingTools">                    
                     <i class="material-symbols-outlined align-middle btn-icon-tool btn-icon-tool-selected" title="Ink Pen" data-tool="1" onclick="VersaSketch.changeTool(this, 1);">ink_pen</i>
@@ -2034,7 +2052,7 @@
         <div>
 
             <br />
-            <p>JSON Data Storage - <a href="javascript:VersaSketch.save();">Save</a> <a href="javascript:VersaSketch.load();">Load</a></p>
+            <p>VersaSketch JSON Data File - <a href="javascript:VersaSketch.save();">Save</a> <a href="javascript:VersaSketch.load();">Load</a></p>
             <textarea id="versaSketchData" style="width:800px;height:400px;">
                 {
                     "filename":"sample.vsk",
@@ -2043,19 +2061,19 @@
                     "layercount":3,
                     "layers": [
                         { 
-                            "name":"layer1",
+                            "name":"Layer0",
                             "description": "Background layer",
-                            "data": "xxxxxx"
+                            "data": "data:image/png;base64..."
                         },
                         { 
-                            "name":"layer2",
+                            "name":"Layer1",
                             "description": "Highlight layer",
-                            "data": "xxxxxx"
+                            "data": "data:image/png;base64..."
                         },      
                         { 
-                            "name":"layer3",
+                            "name":"Layer2",
                             "description": "Drawing layer",
-                            "data": "xxxxxx"
+                            "data": "data:image/png;base64..."
                         }                                          
                     ]
                 }
