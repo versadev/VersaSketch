@@ -1,0 +1,444 @@
+:root {	
+    /* VersaDev: colours defined as #ff0000 are either currently not used or for debug purpose */
+    
+    /* Styles defined by theme */
+    --display-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";            
+    --systemBorderRadius: 8px; /* defines the radius applied to borders and controls */
+        
+    --scrollbar-color: #dddddd; /* set colour of custom scrollbar */
+        
+    --debugWindowColor: #222222; /* debug window background colour */
+    --debugWindowTextColor: #00ff21; /* debug window text colour */
+    --debugWindowBorderColor: #00ff21; /* debug window border colour */
+
+    --icon-button-text-colour: #555555;
+    --icon-button-background-colour: #ffffff;
+    --icon-button-border-colour: #aaaaaa;
+    --icon-button-hover-text-colour: #000000;
+    --icon-button-hover-background-colour: #0d6efd;
+    --icon-button-border-radius: 4px;
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;          
+    src: url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    src: url(../fonts/Material-Symbols-Outlined.woff2) format('woff');
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.5em; /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    color: #000000;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;  /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+}
+
+/* Rules for sizing the icon. */
+.material-icons.md-10 {
+    font-size: 10px;
+}
+
+.material-icons.md-12 {
+    font-size: 12px;
+}
+
+.material-icons.md-14 {
+    font-size: 14px;
+}
+
+.material-icons.md-16 {
+    font-size: 16px;
+}
+
+.material-icons.md-18 {
+    font-size: 18px;
+}
+
+.material-icons.md-24 {
+    font-size: 24px;
+}
+
+.material-icons.md-36 {
+    font-size: 36px;
+}
+
+.material-icons.md-48 {
+    font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark {
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.material-icons.md-dark.md-inactive {
+    color: rgba(0, 0, 0, 0.26);
+}
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light {
+    color: rgba(255, 255, 255, 1);
+}
+
+.material-icons.md-light.md-inactive {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.material-icons.orange600 {
+    color: #FB8C00;
+}
+
+* {
+    /* Prevent selection of text. Without this text on the screen will be selected as we move the mouse (mousedown). */
+    -webkit-user-select: none;
+}
+
+body {
+    box-sizing: border-box;
+    font-family: var(--display-font);
+    margin: 0px;
+    padding: 20px;
+}
+
+#versaSketchCanvasInfo {
+    touch-action: none; /* this is very important for touch to work */
+    position: absolute;
+    display: block;
+    visibility: visible;
+    top: 400px;
+    right: 50px;
+    padding: 4px 4px 4px 4px;
+    width: 400px;
+    height: 300px;
+    border: 1px solid var(--debugWindowBorderColor);
+    border-radius: var(--systemBorderRadius);
+    overflow: scroll;
+    background-color: var(--debugWindowColor);
+    font-family: Consolas, Courier, Lucida Console !important;
+    color: var(--debugWindowTextColor);
+    z-index: 1049; /* same value used by bootstrap modal - 1 */
+}
+
+.drawingModule {
+    display: inline-block;
+    position: relative;
+    background-color: #ffffff;            
+    margin: 0px;
+    padding: 10px;
+    border: 2px solid #dddddd;
+    border-radius: 5px;            
+}
+
+.drawingContainer {
+    display: inline-block;
+    position: relative;
+    background-color: #ffffff;            
+    margin: 0px;
+    padding: 0px;
+    border: 0px solid #ff0000;
+    /*width: 800px;
+    height: 400px;*/
+}
+
+.canvasArea {
+    display: inline-block;
+    position: relative;
+    background-color: #ffffff;            
+    margin: 0px;
+    padding: 0px;
+    border: 0px solid #0000ff;
+    width: 602px;
+    height: 402px;
+    overflow: auto;
+}
+
+.drawingTools {
+    display: flex;
+    position: relative;  
+    align-items: center;        
+    width: 100%;
+    padding: 5px;
+    border: 0px solid #ff0000;
+}
+
+.backgroundCanvas {
+    display: block;
+    position: absolute;            
+    background-color: transparent;   
+    top: 0px;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0px solid #ff0000;
+    z-index: 10;
+}
+
+.drawingCanvas {
+    display: block;
+    position: relative;            
+    background-color: transparent;  
+    /*width: 300px;*/
+    /*height: 100px;*/         
+    margin: 0;
+    padding: 0;
+    border: 1px solid #eeeeee;
+    z-index: 20;
+}
+
+.highlightCanvas {
+    display: block;
+    position: absolute;            
+    background-color: transparent;   
+    top: 0px;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0px solid #ff0000;
+    z-index: 15;
+}
+
+.penSettings {
+    display: flex;
+    position: relative; 
+    justify-content: left;
+    align-items: center;         
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    border: 0px solid #ff0000;        
+    visibility: visible;
+}
+
+.zoomControl {
+    display: inline-flex;
+    width: 200px;
+    align-items: center;
+    border: 0px solid #ff0000;
+}
+
+.eraserSettings {
+    display: none;
+    position: relative; 
+    justify-content: left;
+    align-items: center;         
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    border: 0px solid #ff0000;        
+    visibility: visible;
+}
+
+.highlightSettings {
+    display: none;
+    position: relative; 
+    justify-content: left;
+    align-items: center;         
+    width: 100%;
+    height: 50px;
+    padding: 5px;
+    border: 0px solid #ff0000;        
+    visibility: hidden;
+}
+
+.colourPreview {
+    display: inline-block;
+    position: relative;  
+    width: 30px;
+    height: 30px;
+    border: 2px solid #aaaaaa;            
+    border-radius: 15px;
+    padding: 0px;
+    margin: 5px;
+}
+
+.colourSwatch {
+    display: inline-block;
+    position: relative;  
+    width: 20px;
+    height: 20px;
+    border: 2px solid #aaaaaa;            
+    border-radius: 10px;
+    padding: 0px;
+    margin: 3px;
+}
+
+.highlightPreview {
+    display: inline-block;
+    position: relative;  
+    width: 30px;
+    height: 30px;
+    border: 2px solid #aaaaaa;            
+    border-radius: 15px;
+    padding: 0px;
+    margin: 5px;
+}
+
+.highlightSwatch {
+    display: inline-block;
+    position: relative;  
+    width: 20px;
+    height: 20px;
+    border: 2px solid #aaaaaa;            
+    border-radius: 10px;
+    padding: 0px;
+    margin: 3px;
+}
+
+/* Eraser cursor */
+.toolEraser {
+    display: block;
+    position: absolute;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #aaaaaa;            
+    border-radius: 20px;
+    z-index: 15; /* must be less than the canvas we are erasing so as not to conflict with cursor */
+}
+
+/* VersaDev icon tool buttons start */
+.btn-icon-tool {
+    display: inline-block;
+    color: var(--icon-button-text-colour);
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0.15rem;
+    margin: 0rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    border: 0.15rem solid transparent;
+    border-radius: var(--icon-button-border-radius);
+    background-color: var(--icon-button-background-colour);
+}
+
+.btn-icon-tool:hover {
+    color: var(--icon-button-hover-text-colour);
+    background-color: var(--icon-button-hover-background-colour);
+    border-color: var(--icon-button-border-colour);
+}
+
+.btn-icon-tool-selected {
+    border: 0.15rem solid var(--icon-button-border-colour);
+    border-radius: var(--icon-button-border-radius);
+}
+
+.btn-icon-tool-selected:hover {
+    color: var(--icon-button-hover-text-colour);
+    background-color: var(--icon-button-hover-background-colour);
+}
+/* VersaDev icon tool buttons end */
+
+/* VersaDev: Debug window start */
+#versaSketchDebugWindow {
+    touch-action: none; /* this is very important for touch to work */
+    position: absolute;
+    display: block;
+    visibility: visible;
+    top: 50px;
+    right: 50px;
+    padding: 4px 4px 4px 4px;
+    width: 400px;
+    height: 300px;
+    border: 1px solid var(--debugWindowBorderColor);
+    border-radius: var(--systemBorderRadius);
+    overflow: scroll;
+    background-color: var(--debugWindowColor);
+    font-family: Consolas, Courier, Lucida Console !important;
+    color: var(--debugWindowTextColor);
+    z-index: 1050; /* same value used by bootstrap modal */
+}
+/* VersaDev: Debug window end */
+
+/* VersaDev: Custom scrollbar start */
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 0.8rem;
+    height: 0.9rem;
+}
+
+/* Track (progress bar) */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0px var(--grey);
+    border-radius: var(--systemBorderRadius);
+}
+
+/* Handle (draggable scrolling handle) */
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color);
+    border-radius: var(--systemBorderRadius);
+    opacity: 0.7;
+}      
+/* Buttons (arrows pointing upwards and downwards) */
+::-webkit-scrollbar-button {
+}
+
+/* Track (progress bar - NOT covered by the handle) */
+::-webkit-scrollbar-track-piece {
+}
+
+/*  Corner (corner of the scrollbar, where both horizontal and vertical scrollbars meet) */
+::-webkit-scrollbar-corner {
+}
+
+/* Resizer (draggable resizing handle that appears at the bottom corner of some elements) */
+::-webkit-resizer {
+}          
+/* VersaDev: Custom scrollbar end */
+
+/* VersaDev: Custom colour input start */
+input[type="color"] {
+    -webkit-appearance: none;            
+    width: 30px;
+    height: 30px;
+    border: 2px solid #aaaaaa;            
+    border-radius: 15px;
+    padding: 0px;
+    margin: 5px;  
+    overflow: hidden;          
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+}
+/* VersaDev: Custom colour input end */
